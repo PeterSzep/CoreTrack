@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "917740653731",
+    "project_id": "health-app-3291c",
+    "storage_bucket": "health-app-3291c.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:917740653731:android:831eff4670935bd1500316",
+        "android_client_info": {
+          "package_name": "com.example.coretrack"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyADg3_4pUq_WdLdISLRnZrMy0YzNeE39WM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
