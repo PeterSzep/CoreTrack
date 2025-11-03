@@ -1,7 +1,11 @@
 <resources>
     <string name="app_name">CoreTrack</string>
     <string name="login">Login</string>
+    <string name="register">Register</string>
     <string name="enterYourEmail">Enter your email</string>
     <string name="enterYourPassword">Enter your password</string>
+    <string name="reEnterYourPassword">Enter your password again</string>
     <string name="rememberMe">Remember me</string>
+    <string name="forgotYourPassword">Forgot your password?</string>
+    <string name="NewUser">New user? Sign Up</string>
 </resources>
