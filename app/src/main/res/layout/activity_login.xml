@@ -69,17 +69,6 @@
             android:textColorHint="@color/white"/>
     </com.google.android.material.textfield.TextInputLayout>
 
-    <CheckBox
-        android:layout_width="wrap_content"
-        android:layout_height="50dp"
-        android:text="@string/rememberMe"
-        android:textColor="@color/white"
-        android:buttonTint="@color/softGray"
-        app:layout_constraintTop_toBottomOf="@id/passwordTextField"
-        app:layout_constraintStart_toStartOf="@id/passwordTextField"
-        android:layout_marginStart="15dp"
-        android:layout_marginTop="20dp"
-        />
 
     <TextView
         android:id="@+id/forgotPasswordTextView"

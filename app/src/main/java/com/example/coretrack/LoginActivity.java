@@ -4,16 +4,22 @@ import android.content.Intent;
 import android.graphics.Paint;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
-
+import android.widget.Toast;
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
-
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 public class LoginActivity extends AppCompatActivity {
+    private EditText emailEditText, passwordEditText;
+    private TextView newUserTextView;
+    private Button loginButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,19 +32,70 @@ public class LoginActivity extends AppCompatActivity {
             return insets;
         });
 
+        if(isLoggedIn()){
+            Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+            startActivity(intent);
+            finish();
+        }
+
+        emailEditText = findViewById(R.id.emailEditText);
+        passwordEditText = findViewById(R.id.passwordEditText);
+        loginButton = findViewById(R.id.loginButton);
+
         TextView forgotPasswordTextView = findViewById(R.id.forgotPasswordTextView);
-        TextView newUserTextView = findViewById(R.id.newUserTextView);
+        newUserTextView = findViewById(R.id.newUserTextView);
 
         //creates an underline under the text
         forgotPasswordTextView.setPaintFlags(forgotPasswordTextView.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
         newUserTextView.setPaintFlags(newUserTextView.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
 
+        //onClick listeners
+        newUserClick();
+        loginClick();
+    }
+
+    public boolean isLoggedIn(){
+        FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
+        return currentUser != null;
+    }
+
+    public void newUserClick(){
         newUserTextView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(LoginActivity.this, RegisterActivity.class);
-                LoginActivity.this.startActivity(intent);
+                startActivity(intent);
+                finish();
+
             }
         });
+    }
+
+    public void loginClick(){
+        loginButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                handleLogin();
+            }
+        });
+    }
+
+    public void handleLogin(){
+        String email = emailEditText.getText().toString();
+        String password = passwordEditText.getText().toString();
+
+        FirebaseAuth mAuth = FirebaseAuth.getInstance();
+
+        mAuth.signInWithEmailAndPassword(email, password)
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                        startActivity(intent);
+                        finish();
+                    } else {
+                        Toast toast = Toast.makeText(LoginActivity.this,getString(R.string.loginFailed), Toast.LENGTH_SHORT);
+                        toast.show();
+                    }
+                });
     }
 }

@@ -23,7 +23,7 @@
         />
 
     <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/emailTextField"
+        android:id="@+id/emailInputLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="@string/enterYourEmail"
@@ -47,12 +47,12 @@
 
 
     <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/passwordTextField"
+        android:id="@+id/passwordInputLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="@string/enterYourPassword"
         app:boxBackgroundMode="outline"
-        app:layout_constraintTop_toBottomOf="@id/emailTextField"
+        app:layout_constraintTop_toBottomOf="@id/emailInputLayout"
         android:layout_marginTop="30dp"
         app:passwordToggleEnabled="true"
         app:boxStrokeColor="@color/purple_500"
@@ -73,12 +73,12 @@
 
 
     <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/reenterPasswordTextField"
+        android:id="@+id/reenterPasswordInputLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="@string/reEnterYourPassword"
         app:boxBackgroundMode="outline"
-        app:layout_constraintTop_toBottomOf="@id/passwordTextField"
+        app:layout_constraintTop_toBottomOf="@id/passwordInputLayout"
         android:layout_marginTop="30dp"
         app:passwordToggleEnabled="true"
         app:boxStrokeColor="@color/purple_500"
@@ -99,10 +99,10 @@
 
 
     <Button
-        android:id="@+id/loginButton"
+        android:id="@+id/registerButton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@id/reenterPasswordTextField"
+        app:layout_constraintTop_toBottomOf="@id/reenterPasswordInputLayout"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         android:layout_marginStart="20dp"
