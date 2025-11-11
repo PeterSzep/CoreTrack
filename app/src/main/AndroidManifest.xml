@@ -12,11 +12,14 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.CoreTrack">
         <activity
+            android:name=".QuestionnaireActivity"
+            android:exported="false" />
+        <activity
             android:name=".RegisterActivity"
             android:exported="false" />
         <activity
             android:name=".MainActivity"
-            android:exported="false" /> <!-- Main launcher activity -->
+            android:exported="false" />
         <activity
             android:name=".LoginActivity"
             android:exported="true">

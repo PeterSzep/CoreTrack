@@ -8,6 +8,18 @@
     android:background="@drawable/big_gradient"
     tools:context=".MainActivity">
 
+    <TextView
+        android:id="@+id/titleTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginTop="15dp"
+        android:textSize="35sp"
+        android:textColor="@color/white"
+        />
+
     <com.mikhaellopez.circularprogressbar.CircularProgressBar
         android:id="@+id/stepCircularBar"
         android:layout_width="300dp"

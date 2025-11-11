@@ -10,11 +10,16 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import com.google.firebase.Firebase;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.mikhaellopez.circularprogressbar.CircularProgressBar;
+
+import java.util.Objects;
 
 public class MainActivity extends AppCompatActivity {
     private CircularProgressBar stepsProgressBar;
-    private TextView stepsTextview, caloriesTextView, kilometersTextView;
+    private TextView stepsTextview, caloriesTextView, kilometersTextView, titleTextView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,6 +36,7 @@ public class MainActivity extends AppCompatActivity {
         stepsTextview = findViewById(R.id.stepsTextview);
         caloriesTextView = findViewById(R.id.caloriesTextView);
         kilometersTextView = findViewById(R.id.kilometersTextView);
+        titleTextView = findViewById(R.id.titleTextView);
 
         stepsProgressBar.setProgressMax(10000f);
         String currentSteps = "7500";
@@ -39,5 +45,22 @@ public class MainActivity extends AppCompatActivity {
         caloriesTextView.setText("500\nKcal");
         kilometersTextView.setText("5,5\nKm");
         stepsTextview.setText(currentSteps + "\nsteps");
+        getData();
+    }
+
+    public void getData() {
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+
+        db.collection("users")
+                .get()
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        for (QueryDocumentSnapshot document : task.getResult()) {
+                            String name = document.getString("name");
+                            String surname = document.getString("surname");
+                            titleTextView.setText(getString(R.string.hello, name, surname));                            //stepsProgressBar.setProgress(steps);
+                        }
+                    }
+                });
     }
 }

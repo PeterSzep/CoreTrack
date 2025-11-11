@@ -43,10 +43,10 @@ public class RegisterActivity extends AppCompatActivity {
         passwordInputLayout = findViewById(R.id.passwordInputLayout);
         reenterPasswordInputLayout = findViewById(R.id.reenterPasswordInputLayout);
 
-        registerClick();
+        handleClicks();
     }
 
-    public void registerClick(){
+    public void handleClicks(){
         registerButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -83,6 +83,10 @@ public class RegisterActivity extends AppCompatActivity {
     }
 
     public void handleRegister(){
+        emailInputLayout.setError(null);
+        passwordInputLayout.setError(null);
+        reenterPasswordInputLayout.setError(null);
+
         String email = String.valueOf(emailEditText.getText());
         String password = String.valueOf(passwordEditText.getText());
         String reenterPassword = String.valueOf(reenterPasswordEditText.getText());
@@ -114,7 +118,7 @@ public class RegisterActivity extends AppCompatActivity {
         firebaseAuth.createUserWithEmailAndPassword(email, password)
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
-                        Intent intent = new Intent(RegisterActivity.this, MainActivity.class);
+                        Intent intent = new Intent(RegisterActivity.this, QuestionnaireActivity.class);
                         startActivity(intent);
                         finish();
                     } else {

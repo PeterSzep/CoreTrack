@@ -13,6 +13,15 @@
     <string name="invalidPasswordLength">Password must be at least 8 characters long!</string>
     <string name="passwordsDoNotMatch">Passwords do not match!</string>
     <string name="loginFailed">Login failed. Please check your email and password.</string>
-
+    <string name="EnterYourName">Enter your name</string>
+    <string name="EnterYourSurname">Enter your surname</string>
+    <string name="selectAge">Please select your age</string>
+    <string name="DailyGoal">Please select your daily goal</string>
+    <string name="getStarted">Let\'s Get Started!</string>
+    <string name="next">Next</string>
+    <string name="stepGoal">Step goal:</string>
+    <string name="invalidName">Invalid name!</string>
+    <string name="invalidSurname">Invalid surname!</string>
+    <string name="hello">Hello %1$s %2$s</string>
 
 </resources>

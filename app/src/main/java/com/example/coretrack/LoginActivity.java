@@ -32,11 +32,12 @@ public class LoginActivity extends AppCompatActivity {
             return insets;
         });
 
+        /*
         if(isLoggedIn()){
             Intent intent = new Intent(LoginActivity.this, MainActivity.class);
             startActivity(intent);
             finish();
-        }
+        }*/
 
         emailEditText = findViewById(R.id.emailEditText);
         passwordEditText = findViewById(R.id.passwordEditText);
@@ -50,8 +51,7 @@ public class LoginActivity extends AppCompatActivity {
         newUserTextView.setPaintFlags(newUserTextView.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
 
         //onClick listeners
-        newUserClick();
-        loginClick();
+        handleClicks();
     }
 
     public boolean isLoggedIn(){
@@ -59,7 +59,7 @@ public class LoginActivity extends AppCompatActivity {
         return currentUser != null;
     }
 
-    public void newUserClick(){
+    public void handleClicks(){
         newUserTextView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -69,9 +69,7 @@ public class LoginActivity extends AppCompatActivity {
 
             }
         });
-    }
 
-    public void loginClick(){
         loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
