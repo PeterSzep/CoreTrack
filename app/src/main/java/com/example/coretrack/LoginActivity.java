@@ -33,12 +33,6 @@ public class LoginActivity extends AppCompatActivity {
             return insets;
         });
 
-        /*
-        if(isLoggedIn()){
-            Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-            startActivity(intent);
-            finish();
-        }*/
 
         emailEditText = findViewById(R.id.emailEditText);
         passwordEditText = findViewById(R.id.passwordEditText);
@@ -49,11 +43,6 @@ public class LoginActivity extends AppCompatActivity {
 
         //onClick listeners
         handleClicks();
-    }
-
-    public boolean isLoggedIn(){
-        FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
-        return currentUser != null;
     }
 
     public void handleClicks(){
@@ -71,6 +60,15 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 handleLogin();
+            }
+        });
+
+        forgotPasswordTextView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(LoginActivity.this, ForgotPasswordActivity.class);
+                startActivity(intent);
+                finish();
             }
         });
     }

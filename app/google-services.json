@@ -12,7 +12,20 @@
           "package_name": "com.example.coretrack"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "917740653731-ol30p31nsra5tsvrm8i3d9u5hk583aji.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.coretrack",
+            "certificate_hash": "034b1767cf039bc026d94662963a216002462ac8"
+          }
+        },
+        {
+          "client_id": "917740653731-evpvkvijfbrr03nv2f3gra2mc6sj7gpf.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
           "current_key": "AIzaSyADg3_4pUq_WdLdISLRnZrMy0YzNeE39WM"
@@ -20,7 +33,12 @@
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "917740653731-evpvkvijfbrr03nv2f3gra2mc6sj7gpf.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
         }
       }
     }

@@ -12,14 +12,18 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
-
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.SignInButton;
+import com.google.android.gms.common.api.ApiException;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.textfield.TextInputLayout;
+import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.GoogleAuthProvider;
 import com.google.firebase.firestore.FirebaseFirestore;
 import java.util.HashMap;
 import java.util.Map;
@@ -30,6 +34,8 @@ public class RegisterActivity extends AppCompatActivity {
     private TextInputLayout emailInputLayout, passwordInputLayout, reenterPasswordInputLayout, nameInputLayout;
     private Button registerButton;
     private SignInButton googleSignInButton;
+    private FirebaseAuth firebaseAuth;
+    private static final int RC_SIGN_IN = 100; // you can pick any integer
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,6 +47,11 @@ public class RegisterActivity extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
+
+        FirebaseAuth.getInstance().signOut();
+        if(isLoggedIn()){
+           openMainActivity();
+        }
 
         emailEditText = findViewById(R.id.emailEditText);
         passwordEditText = findViewById(R.id.passwordEditText);
@@ -55,7 +66,20 @@ public class RegisterActivity extends AppCompatActivity {
         passwordInputLayout = findViewById(R.id.passwordInputLayout);
         reenterPasswordInputLayout = findViewById(R.id.confirmPasswordInputLayout);
 
+        firebaseAuth = FirebaseAuth.getInstance();
+
         handleClicks();
+    }
+
+    public  void openMainActivity() {
+        Intent intent = new Intent(RegisterActivity.this, ForgotPasswordActivity.class);
+        startActivity(intent);
+        finish();
+    }
+
+    public boolean isLoggedIn(){
+        FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
+        return currentUser != null;
     }
 
     public void handleClicks(){
@@ -70,6 +94,7 @@ public class RegisterActivity extends AppCompatActivity {
         googleSignInButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                handleGoogleSignIn();
             }
         });
     }
@@ -106,7 +131,7 @@ public class RegisterActivity extends AppCompatActivity {
         return Patterns.EMAIL_ADDRESS.matcher(email).matches();
     }
 
-    //compares the re entered password if are the same
+    //compares the reentered password if are the same
     public boolean comparePassword(String password, String reenterPassword){
         if(password == null || reenterPassword == null){
             return false;
@@ -154,8 +179,64 @@ public class RegisterActivity extends AppCompatActivity {
         }
     }
 
+    public void handleGoogleSignIn(){
+        GoogleSignInOptions googleSignInOptions = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestIdToken(getString(R.string.default_web_client_id))
+                .requestEmail()
+                .build();
+
+        GoogleSignInClient googleSignInClient = GoogleSignIn.getClient(this, googleSignInOptions);
+
+        Intent signInIntent = googleSignInClient.getSignInIntent();
+        startActivityForResult(signInIntent, RC_SIGN_IN);
+
+    }
+
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == RC_SIGN_IN) {
+            Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
+            try {
+                GoogleSignInAccount account = task.getResult(ApiException.class);
+
+                String idToken = account.getIdToken();
+
+                AuthCredential credential = GoogleAuthProvider.getCredential(idToken, null);
+                FirebaseAuth.getInstance().signInWithCredential(credential)
+                        .addOnCompleteListener(this, authTask -> {
+                            if (authTask.isSuccessful()) {
+                                FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+                                if (user != null) {
+                                    String uid = user.getUid();
+                                    String email = user.getEmail();
+                                    String name = user.getDisplayName();
+
+                                    FirebaseFirestore db = FirebaseFirestore.getInstance();
+                                    Map<String, Object> userData = new HashMap<>();
+                                    userData.put("name", name);
+                                    userData.put("email", email);
+
+                                    db.collection("users").document(uid).set(userData)
+                                            .addOnSuccessListener(aVoid -> {
+                                                openMainActivity();
+                                            });
+
+                                }
+                            }
+                        });
+
+            } catch (ApiException e) {
+                Toast.makeText(this, getString(R.string.errorSigningIn), Toast.LENGTH_SHORT).show();
+            }
+        }
+    }
+
+
+
     public void createUser(String email, String password, String name){
-        FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
         firebaseAuth.createUserWithEmailAndPassword(email, password)
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
@@ -170,9 +251,7 @@ public class RegisterActivity extends AppCompatActivity {
 
                             db.collection("users").document(uid).set(userData)
                                     .addOnSuccessListener(aVoid -> {
-                                        Intent intent = new Intent(RegisterActivity.this, MainActivity.class);
-                                        startActivity(intent);
-                                        finish();
+                                       openMainActivity();
                                     });
                         }
                     } else {
@@ -180,6 +259,4 @@ public class RegisterActivity extends AppCompatActivity {
                     }
                 });
     }
-
-
 }

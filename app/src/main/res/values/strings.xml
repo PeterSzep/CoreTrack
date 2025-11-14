@@ -16,6 +16,9 @@
     <string name="enter_password">Enter Password</string>
     <string name="login_to_get_started">Login to get started</string>
     <string name="create_account">Create Account</string>
+    <string name="errorSigningIn">Error signing in. Please try again later</string>
+    <string name="sendEmail">"Send Reset Link"</string>
+    <string name="enterEmail">Enter your email to get started</string>
     <string name="enterYourPassword">Enter your password</string>
     <string name="reEnterYourPassword">Enter your password again</string>
     <string name="rememberMe">Remember me</string>
@@ -36,5 +39,4 @@
     <string name="invalidName">Invalid name!</string>
     <string name="invalidSurname">Invalid surname!</string>
     <string name="hello">Hello %1$s</string>
-
 </resources>
