@@ -18,7 +18,8 @@ import com.google.firebase.auth.FirebaseUser;
 
 public class LoginActivity extends AppCompatActivity {
     private EditText emailEditText, passwordEditText;
-    private TextView newUserTextView;
+    private TextView newUserTextView, forgotPasswordTextView;
+
     private Button loginButton;
 
     @Override
@@ -43,12 +44,8 @@ public class LoginActivity extends AppCompatActivity {
         passwordEditText = findViewById(R.id.passwordEditText);
         loginButton = findViewById(R.id.loginButton);
 
-        TextView forgotPasswordTextView = findViewById(R.id.forgotPasswordTextView);
         newUserTextView = findViewById(R.id.newUserTextView);
-
-        //creates an underline under the text
-        forgotPasswordTextView.setPaintFlags(forgotPasswordTextView.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
-        newUserTextView.setPaintFlags(newUserTextView.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
+        forgotPasswordTextView = findViewById(R.id.forgotYourPasswordTextView);
 
         //onClick listeners
         handleClicks();

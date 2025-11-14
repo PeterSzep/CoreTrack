@@ -12,15 +12,24 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
+
+import com.google.android.gms.auth.api.signin.GoogleSignIn;
+import com.google.android.gms.auth.api.signin.GoogleSignInClient;
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.google.android.gms.common.SignInButton;
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.auth.FirebaseAuth;
-
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.FirebaseFirestore;
+import java.util.HashMap;
+import java.util.Map;
 
 
 public class RegisterActivity extends AppCompatActivity {
-    private EditText emailEditText, passwordEditText, reenterPasswordEditText;
-    private TextInputLayout emailInputLayout, passwordInputLayout, reenterPasswordInputLayout;
+    private EditText emailEditText, passwordEditText, reenterPasswordEditText, nameEditText;
+    private TextInputLayout emailInputLayout, passwordInputLayout, reenterPasswordInputLayout, nameInputLayout;
     private Button registerButton;
+    private SignInButton googleSignInButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,13 +44,16 @@ public class RegisterActivity extends AppCompatActivity {
 
         emailEditText = findViewById(R.id.emailEditText);
         passwordEditText = findViewById(R.id.passwordEditText);
-        reenterPasswordEditText = findViewById(R.id.reenterPasswordEditText);
+        reenterPasswordEditText = findViewById(R.id.confirmPasswordEditText);
+        nameEditText = findViewById(R.id.nameEditText);
 
-        registerButton = findViewById(R.id.registerButton);
+        registerButton = findViewById(R.id.createAccountButton);
+        googleSignInButton = findViewById(R.id.googleSignInButton);
 
+        nameInputLayout = findViewById(R.id.nameInputLayout);
         emailInputLayout = findViewById(R.id.emailInputLayout);
         passwordInputLayout = findViewById(R.id.passwordInputLayout);
-        reenterPasswordInputLayout = findViewById(R.id.reenterPasswordInputLayout);
+        reenterPasswordInputLayout = findViewById(R.id.confirmPasswordInputLayout);
 
         handleClicks();
     }
@@ -53,6 +65,27 @@ public class RegisterActivity extends AppCompatActivity {
                 handleRegister();
             }
         });
+
+
+        googleSignInButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+            }
+        });
+    }
+
+
+    //check if name has forbidden chars
+    public boolean isValid(String input) {
+        if (input == null) {
+            return false;
+        }
+
+        input = input.trim();
+        if (input.length() < 2) {
+            return false;
+        }
+        return input.matches("^[\\p{L}\\s'-]+$");
     }
 
     //check if password is at least 8 chars long
@@ -87,10 +120,18 @@ public class RegisterActivity extends AppCompatActivity {
         passwordInputLayout.setError(null);
         reenterPasswordInputLayout.setError(null);
 
-        String email = String.valueOf(emailEditText.getText());
-        String password = String.valueOf(passwordEditText.getText());
-        String reenterPassword = String.valueOf(reenterPasswordEditText.getText());
+        String name = nameEditText.getText().toString();
+        String email = emailEditText.getText().toString();
+        //Log.d("email", email);
+        String password = passwordEditText.getText().toString();
+        String reenterPassword = reenterPasswordEditText.getText().toString();
+
         boolean valid = true;
+
+        if(!isValid(name)){
+            nameInputLayout.setError(getString(R.string.invalidName));
+            valid = false;
+        }
 
         if(!isValidEmail(email)){
             emailInputLayout.setError(getString(R.string.invalidEmail));
@@ -109,22 +150,36 @@ public class RegisterActivity extends AppCompatActivity {
         }
 
         if(valid){
-            createUser(email,password);
+            createUser(email,password, name);
         }
     }
 
-    public void createUser(String email, String password){
+    public void createUser(String email, String password, String name){
         FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
         firebaseAuth.createUserWithEmailAndPassword(email, password)
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
-                        Intent intent = new Intent(RegisterActivity.this, QuestionnaireActivity.class);
-                        startActivity(intent);
-                        finish();
+                        FirebaseUser user = firebaseAuth.getCurrentUser();
+                        if (user != null) {
+                            String uid = user.getUid();
+
+                            FirebaseFirestore db = FirebaseFirestore.getInstance();
+                            Map<String, Object> userData = new HashMap<>();
+                            userData.put("name", name);
+                            userData.put("email", email);
+
+                            db.collection("users").document(uid).set(userData)
+                                    .addOnSuccessListener(aVoid -> {
+                                        Intent intent = new Intent(RegisterActivity.this, MainActivity.class);
+                                        startActivity(intent);
+                                        finish();
+                                    });
+                        }
                     } else {
-                        Toast toast = Toast.makeText(RegisterActivity.this,getString(R.string.errorRegistering), Toast.LENGTH_SHORT);
-                        toast.show();
+                        Toast.makeText(RegisterActivity.this, getString(R.string.errorRegistering), Toast.LENGTH_SHORT).show();
                     }
                 });
     }
+
+
 }

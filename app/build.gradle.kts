@@ -3,6 +3,7 @@ plugins {
     id("com.google.gms.google-services")
 }
 
+
 android {
     namespace = "com.example.coretrack"
     compileSdk {
@@ -48,4 +49,6 @@ dependencies {
     implementation("com.google.firebase:firebase-analytics")
     implementation("com.mikhaellopez:circularprogressbar:3.1.0")
     implementation ("com.google.firebase:firebase-firestore")
+    implementation("com.google.android.gms:play-services-auth:21.2.0") // Google Sign-In
+    implementation("com.google.firebase:firebase-auth")
 }

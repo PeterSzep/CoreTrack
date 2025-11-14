@@ -6,6 +6,9 @@
     <color name="teal_200">#FF03DAC5</color>
     <color name="teal_700">#FF018786</color>
     <color name="black">#FF000000</color>
+    <color name="gray_medium">#555555</color>
+    <color name="gray_for_inputs">#A9A9A9</color>
+    <color name="blue_for_buttons">#124BCD</color>
     <color name="white">#FFFFFFFF</color>
     <color name="violetBlue">#5733FF</color>
     <color name="softGray">#E0E0E0</color>

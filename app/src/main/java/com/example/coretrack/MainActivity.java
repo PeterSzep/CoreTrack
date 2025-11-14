@@ -57,8 +57,7 @@ public class MainActivity extends AppCompatActivity {
                     if (task.isSuccessful()) {
                         for (QueryDocumentSnapshot document : task.getResult()) {
                             String name = document.getString("name");
-                            String surname = document.getString("surname");
-                            titleTextView.setText(getString(R.string.hello, name, surname));                            //stepsProgressBar.setProgress(steps);
+                            titleTextView.setText(getString(R.string.hello, name));                            //stepsProgressBar.setProgress(steps);
                         }
                     }
                 });
